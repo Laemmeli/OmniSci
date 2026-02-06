@@ -1,54 +1,76 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>OmniSci - Accueil</title>
-<style>
-  body { 
-    font-family: Arial, sans-serif; 
-    text-align: center; 
-    margin: 0; 
-    background-color: #f5f5f5; 
-  }
-  #logo { max-width: 200px; margin-top: 50px; }
-  h1 { margin: 20px 0; }
-  .centered { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-    min-height: 80vh; 
-  }
-  button { 
-    margin: 20px; 
-    padding: 12px 25px; 
-    font-size: 16px; 
-    cursor: pointer; 
-  }
-  #laboName { 
-    position: fixed; 
-    bottom: 10px; 
-    width: 100%; 
-    font-weight: bold; 
-    font-size: 18px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <title>OmniSci - Connexion</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; background-color: #f0f2f5; color: #333;
+            display: flex; align-items: center; justify-content: center; height: 100vh;
+        }
+        #loginBox {
+            background: white; padding: 40px; border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 350px;
+        }
+        #logo { max-width: 120px; margin-bottom: 20px; }
+        input {
+            width: 100%; padding: 12px; margin: 10px 0;
+            border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;
+        }
+        button {
+            width: 100%; padding: 12px; background-color: #008080; /* Teal OmniSci */
+            color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
+        }
+        button:hover { background-color: #006666; }
+        #errorMsg { color: red; font-size: 14px; display: none; margin-top: 10px; }
+        
+        /* Contenu caché après login */
+        #laboContent { display: none; padding: 20px; text-align: center; }
+    </style>
 </head>
 <body>
 
-<div id="welcomePage" class="centered">
-  <img src="Logo.png" id="logo" alt="Logo">
-  <h1>Welcome</h1>
-  <button onclick="accessLabo()">Accéder au labo</button>
-  <div id="laboName">OmniSciLabA</div>
-</div>
+    <div id="loginBox">
+        <img src="Logo.png" id="logo" alt="OmniSci Logo">
+        <h2>Accès Labo</h2>
+        <input type="password" id="passInput" placeholder="Code d'accès (U1190)">
+        <button onclick="checkAccess()">Entrer dans le labo</button>
+        <p id="errorMsg">Code incorrect. Accès refusé.</p>
+    </div>
 
-<script>
-  function accessLabo() {
-    alert("Prochaine étape : demander le mot de passe et le rôle utilisateur !");
-    // Ici on ajoutera la prochaine étape
-  }
-</script>
+    <div id="laboContent">
+        <h1>Tableau de Bord OmniSci</h1>
+        <p>Bienvenue dans la hiérarchie de niveau $n$.</p>
+        <hr>
+        <div style="display: flex; gap: 20px; justify-content: center;">
+            <div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; background: white;">
+                <h3>Projets (n+1)</h3>
+                <button onclick="alert('Chargement des fichiers Prism...')">Consulter Figures</button>
+            </div>
+            <div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; background: white;">
+                <h3>Consommables</h3>
+                <button onclick="alert('Stock : 80%')">Inventaire Secrétariat</button>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        function checkAccess() {
+            const pass = document.getElementById("passInput").value;
+            const loginBox = document.getElementById("loginBox");
+            const laboContent = document.getElementById("laboContent");
+            const errorMsg = document.getElementById("errorMsg");
+
+            if (pass === "U1190") {
+                loginBox.style.display = "none";
+                laboContent.style.display = "block";
+                document.body.style.backgroundColor = "white";
+                document.body.style.display = "block"; // Remet en flux normal
+            } else {
+                errorMsg.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
