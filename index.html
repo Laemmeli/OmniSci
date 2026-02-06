@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Cahier de labo multi-labo</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; margin-top: 30px; background-color: #f5f5f5; }
+  .choices button, #exportBtn { margin: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  #content, #experiences, #consumables { display: none; margin-top: 20px; }
+  table { margin: 0 auto; border-collapse: collapse; }
+  th, td { border: 1px solid #333; padding: 5px 10px; }
+</style>
+</head>
+<body>
+
+<div id="content">
+  <h1>Bienvenue dans le cahier de labo</h1>
+
+  <!-- Section expériences -->
+  <div id="experiences">
+    <h2>Expériences du labo</h2>
+    <table id="expTable">
+      <thead>
+        <tr><th>Étudiant</th><th>Expérience</th><th>Statut</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Étudiant A</td><td>PCR</td><td>En cours</td></tr>
+        <tr><td>Étudiant B</td><td>Western blot</td><td>Terminé</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section consommables -->
+  <div id="consumables">
+    <h2>Consommables du labo</h2>
+    <table id="consTable">
+      <thead>
+        <tr><th>Nom</th><th>Quantité</th><th>Unité</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Réactif A</td><td>10</td><td>ml</td></tr>
+        <tr><td>Réactif B</td><td>5</td><td>ml</td></tr>
+      </tbody>
+    </table>
+    <button id="exportBtn" onclick="exportExcel()">Exporter Excel</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+  // Mots de passe par labo
+  const LABOS = {
+    "LaboA": "LABOA2026",
+    "LaboB": "LABOB2026",
+    "LaboC": "LABOC2026"
+  };
+
+  // Rôles simulés pour démonstration
+  const ROLES = ["Etudiant", "Superviseur", "Chef"];
+
+  window.onload = function() {
+    const laboChoisi = prompt("Entrez le nom de votre labo :");
+    if (!LABOS[laboChoisi]) {
+      document.body.innerHTML = "<h1>⛔ Labo inconnu</h1>";
+      return;
+    }
+
+    const mdp = prompt(`Mot de passe pour ${laboChoisi} :`);
+    if (mdp !== LABOS[laboChoisi]) {
+      document.body.innerHTML = "<h1>⛔ Accès refusé</h1>";
+      return;
+    }
+
+    // Demander rôle de l'utilisateur pour tester hiérarchie
+    const role = prompt(`Entrez votre rôle (${ROLES.join(" / ")}):`);
+    if (!ROLES.includes(role)) {
+      document.body.innerHTML = "<h1>⛔ Rôle invalide</h1>";
+      return;
+    }
+
+    document.getElementById("content").style.display = "block";
+
+    // Affichage selon rôle
+    if (role === "Etudiant") {
+      document.getElementById("consumables").style.display = "block"; // Peut voir consommables simples
+      document.getElementById("experiences").style.display = "block";  // Ses expériences visibles
+    } else if (role === "Superviseur") {
+      document.getElementById("consumables").style.display = "block"; 
+      document.getElementById("experiences").style.display = "block"; // Accès aux étudiants supervisés
+    } else if (role === "Chef") {
+      document.getElementById("consumables").style.display = "block";
+      document.getElementById("experiences").style.display = "block"; // Accès global
+    }
+  }
+
+  function exportExcel() {
+    const table = document.getElementById("consTable");
+    const wb = XLSX.utils.table_to_book(table, {sheet:"Consommables"});
+    XLSX.writeFile(wb, "consommables.xlsx");
+  }
+</script>
+
+</body>
+</html>
